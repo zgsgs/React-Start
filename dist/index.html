@@ -6,80 +6,95 @@
     <script src="https://cdn.bootcss.com/react/15.4.2/react.min.js"></script>
     <script src="https://cdn.bootcss.com/react/15.4.2/react-dom.min.js"></script>
     <script src="https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js"></script>
+    <script src="https://npmcdn.com/react-router@2.4.0/umd/ReactRouter.min.js"></script>
     <style> #container { padding: 50px; background-color: #FFF; } </style>
-
+    
+    <style type="text/css">
+        body { background-color: #FFCC00; padding: 20px; margin: 0; } h1, h2, p, ul, li { font-family: Helvetica, Arial, sans-serif; } ul.header li { display: inline; list-style-type: none; margin: 0; } ul.header { background-color: #111; padding: 0; } ul.header li a { color: #FFF; font-weight: bold; text-decoration: none; padding: 20px; display: inline-block; } .content { background-color: #FFF; padding: 20px; } .content h2 { padding: 0; margin: 0; } .content li { margin-bottom: 10px; } .active {background-color: #0099FF;}
+    </style>
 </head>
 <body>
-    <!-- <div id="app"></div> -->
-    <!-- <script src="bundle.js"></script> -->
 
     <div id="container"></div>
-    <!-- 制作一个计数器 -->
     <script type="text/babel">
-        var destination = document.querySelector("#container"); 
-
-        var Counter = React.createClass({ 
-            render: function() { 
-                var textStyle = { 
-                    fontSize: 72, 
-                    fontFamily: "sans-serif", 
-                    color: "#333", 
-                    fontWeight: "bold" 
-                }; 
-                return ( 
-                    <div style={textStyle}> {this.props.display} </div> 
-                ); 
-            } 
+        var { Router,
+              Route,
+              IndexRoute,
+              IndexLink,
+              Link,
+            } = ReactRouter;
+        var App = React.createClass({
+            render: function() {
+                return (
+                    <div>
+                        <h1>Simple SPA</h1>
+                        <ul className="header">
+                            <li><IndexLink to ="/" activeClassName="active">Home</IndexLink></li>
+                            <li><Link to="/stuff" activeClassName="active">Stuff</Link></li>
+                            <li><Link to="/contact" activeClassName="active">Contact</Link></li>
+                        </ul>
+                        <div className="content">
+                            {this.props.children}
+                        </div>
+                    </div>
+                )
+            }
         }); 
-        var CounterParent = React.createClass({ 
-            getInitialState: function() { 
-                return { 
-                    count: 0 
-                }; 
-            }, 
-            increase: function(e) {
-                
-                    var currentCount = this.state.count;
-                    if (e.shiftKey) {
-                        currentCount += 10;
-                    } else {
-                        currentCount += 1;
-                    }
-                    this.setState({
-                        count:currentCount
-                    });
-                
-            },
-            render: function() { 
-                var backgroundStyle = { 
-                    padding: 50, 
-                    backgroundColor: "#FFC53A", 
-                    width: 250, 
-                    height: 100, 
-                    borderRadius: 10, 
-                    textAlign: "center" 
-                }; 
-            var buttonStyle = { 
-                fontSize: "1em", 
-                width: 30, 
-                height: 30, 
-                fontFamily: "sans-serif", 
-                color: "#333", 
-                fontWeight: "bold", 
-                lineHeight: "3px" 
-            }; 
-            return ( 
-                <div style={backgroundStyle}> 
-                    <Counter display={this.state.count}/> 
-                    <button onClick={this.increase} style={buttonStyle}>+</button> 
-                </div> 
-            ); 
-        } 
-    }); 
+
+        var Home = React.createClass({
+            render: function() {
+                return (
+                    <div>
+                        <h2>Hello gaosheng</h2>
+                        <p>
+                            Cras facilisis urna ornare ex volutpat, et convallis erat elementum. Ut aliquam, ipsum vitae gravida suscipit, metus dui bibendum est, eget rhoncus nibh metus nec massa. Maecenas hendrerit laoreet augue nec molestie. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.著作权归作者所有。
+商业转载请联系作者获得授权,非商业转载请注明出处。
+原文: https://www.w3cplus.com/react/creating-single-page-app-react-using-react-router.html © w3cplus.com
+                        </p>
+                        <p>Duis a turpis sed lacus dapibus elementum sed eu lectus.</p>
+                    </div>
+                );
+            }
+        });
+
+        var Contact = React.createClass({
+            render: function() {
+                return (
+                    <div>
+                        <h2>Got 哪里去了？</h2>
+                        <p>The easiest thing to do is post on our <a href="https://www.w3cplus.com/react/creating-single-page-app-react-using-react-router.html">forums</a>.</p>
+                    </div>
+                );
+            }
+        });
+
+        var Stuff = React.createClass({
+            render: function() {
+                return (
+                    <div>
+                        <h2>STUFF</h2>
+                        <p>My name is zhaogaosheng:</p>
+                        <ol>
+                            <li>1</li>
+                            <li>2</li>
+                            <li>3</li>
+                            <li>4</li>
+                            <li>5</li>
+                        </ol>
+                    </div>
+                );
+            }
+        });   
+
+        var destination = document.querySelector("#container"); 
         ReactDOM.render( 
-            <div> 
-                <CounterParent/> 
-            </div>,
+            <Router> 
+                <Route path="/" component={App}>
+                    <IndexRoute component={Home} />
+                    <Route path="stuff" component={Stuff} />
+                    <Route path="contact" component={Contact} />
+                </Route>
+            </Router>,
             destination 
         ); 
 
